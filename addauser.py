@@ -102,7 +102,7 @@ def getPasswd():
                 passwd = ""
                 passwdvrfy = ""
             else: break
-    except KeyboardInterrupt: killTask("Interrupt detected, exiting."
+    except KeyboardInterrupt: killTask("Interrupt detected, exiting.")
     return passwd
 
 
