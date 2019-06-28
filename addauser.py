@@ -212,3 +212,51 @@ def createUser(firstName, lastName, userName, group, homeDir):
     else:
         print green + "Created user %s" % user + end
     return result
+
+
+def setUserPasswd(user, passwd)
+   s = "echo %s | passwd --stdin %s 1> /dev/null 2<&1" % (passwd, user)
+    result = subprocess.call(s, shell=True)
+    if not result == 0:
+        print red + "Error in setting password" + end
+    else: print green + "Set password" + end
+    return result
+
+
+def main()
+   if not os.geteuid() == 0:
+        print "You must be root to run this script."
+        sys.exit(1)
+
+    print "Enter user information:\n"
+       firstName = getFirstName()
+        lastName = getLastName()
+        username = getUserName(firstName, lastName)
+        passwd = getPasswd()
+        group = getGroup(username)
+        homeDir = getHomeDir(username)
+
+    print " First Name : %s" % firstName
+    print " Last Name  : %s" % lastName
+    print " Username   : %s" % username
+    print " Password   : ***********"
+    print " Group      : %s" % group
+    print " Home Dir   : %s" % homeDir
+    print "  c) continue"
+    print "  q) quit"
+
+    while True:
+        choice = raw_input('Select [c]: ')
+        if choice == "q":
+            print "Nothing done."
+            sys.exit(0)
+        else: break
+
+    if not createGroup(group) == 0: sys.exit(1)
+    if not createUser(firstName, lastName, username, group, homeDir) == 0:
+        subprocess.call('groupdel %s 1> /dev/null 2>&1' % group, shell=True)
+        sys.exit(1)
+    setUserPasswd(username, passwd)
+
+if __name__ == "__main__":
+    main()                
